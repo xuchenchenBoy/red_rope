@@ -1,0 +1,34 @@
+{
+  "cloud": true,
+  "pages": [
+    "pages/index/main",
+    "pages/person/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#f8f8f8",
+    "navigationBarTitleText": "RedRope",
+    "backgroundColor": "#f8f8f8",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "borderStyle": "white",
+    "color": "#8a8a8a",
+    "selectedColor": "#179B16",
+    "backgroundColor": "#f8f8f8",
+    "list": [
+      {
+        "pagePath": "pages/index/main",
+        "text": "四目相对",
+        "iconPath": "static/imgs/eye.png",
+        "selectedIconPath": "static/imgs/eye-active.png"
+      },
+      {
+        "pagePath": "pages/person/main",
+        "text": "今日的我",
+        "iconPath": "static/imgs/person.png",
+        "selectedIconPath": "static/imgs/person-active.png"
+      }
+    ]
+  }
+}
