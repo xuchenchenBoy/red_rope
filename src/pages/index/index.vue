@@ -5,7 +5,14 @@
 </template>
 
 <script>
-export default {};
+export default {
+  onShareAppMessage() {
+    return {
+      title: 'ta就在你走的这条小路上',
+      path: '/pages/index/main'
+    }
+  }
+};
 </script>
 
 <style scoped>

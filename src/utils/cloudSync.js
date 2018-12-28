@@ -5,30 +5,31 @@
  */
 import { setToken, getToken } from '@/utils/authorize'
 
-export default async function wxCloudSync(name, data) {
+export default async function wxCloudSync(name, data, isLoading = false) {
   const token = getToken()
   if (token) {
-    return await wx.cloud.callFunction({
+    isLoading && wx.showLoading({
+      title: '请求中',
+    })
+    const finalRes = await wx.cloud.callFunction({
       name,
-      data: { 
-        token: token,
+      data: {
+        token,
         ...data
       }
     })
+    isLoading && wx.hideLoading()
+    isLoading && wx.showToast({
+      title: '请求成功',
+      icon: 'success',
+      duration: 1000
+    });
+    return finalRes;
   } else {
     const res = await wx.cloud.callFunction({
       name: 'login'
     })
-    const { result } = res;
-    const { appId, openId } = result || {};
-    const token = `${appId}${openId}`;
-    setToken(token)
-    return await wx.cloud.callFunction({
-      name,
-      data: { 
-        token: token,
-        ...data
-      }
-    })
+    setToken(res.result.token)
+    return await wxCloudSync(name, data, isLoading)
   }
 }

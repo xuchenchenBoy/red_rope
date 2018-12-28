@@ -8,7 +8,7 @@ export default function wxSync({ api, params = {} }) {
     wx[api]({
       ...params,
       success(apiRes) {
-        if (apiRes.errMsg === api + ':ok') {
+        if (apiRes.errMsg === `${api}:ok`) {
           resolve(apiRes)
         } else {
           reject(apiRes)
