@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <view v-if="init">
-      <view v-show="nickName" class="profile-wrapper">
-      <image
-        class="avatar"
-        :src="avatarUrl"
-      ></image>
-      <view>
-        <text>{{nickName}}</text>
-      </view>
+      <view class="profile-wrapper">
+        <image
+          class="avatar"
+          :src="avatarUrl || '/static/imgs/avatar.png'"
+        ></image>
+        <view>
+          <text>{{nickName || '路人甲'}}</text>
+        </view>
       </view>
       <view class="weui-cells__title">描述下自己的穿着打扮</view>
         <view class="weui-cells weui-cells_after-title">
@@ -58,8 +58,8 @@ export default {
   data() {
     return {
       showAuthorize: false,
-      avatarUrl: '/static/imgs/avatar.png',
-      nickName: '路人甲',
+      avatarUrl: '',
+      nickName: '',
       trousersDesc: '',
       shoesDesc: '',
       clothsDesc: '',
@@ -71,17 +71,23 @@ export default {
   },
   methods: {
     async updateInfo() {
-      if (this.nickName) {
-        const { clothsDesc, trousersDesc, shoesDesc, } = this;
+      const { clothsDesc, trousersDesc, shoesDesc, } = this;
+      if (!clothsDesc && !trousersDesc && !shoesDesc) {
+        wx.showToast({
+          title: '请填写穿着描述哦',
+          icon: 'none',
+          duration: 1500
+        })
+      } else if (this.nickName) {
         const userInfo = {
           clothsDesc,
           trousersDesc,
           shoesDesc
         }
         await wxCloudSync('saveUserInfo', userInfo, true)
-        wx.switchTab({
-          url: '/pages/index/main'
-        })
+        // wx.switchTab({
+        //   url: '/pages/index/main'
+        // })
       } else {
         this.showAuthorize = true;
       }
@@ -102,7 +108,10 @@ export default {
         trousersDesc,
         shoesDesc
       } = userInfo.result.data;
-      if (nickName) {
+      if (nickName && this.init) {
+        this.nickName = nickName;
+        this.avatarUrl = avatarUrl;
+      } else if (nickName) {
         this.nickName = nickName;
         this.avatarUrl = avatarUrl;
         this.shoesDesc = shoesDesc;
@@ -120,8 +129,13 @@ export default {
 
 <style scoped>
   .profile-wrapper {
-    padding: 20rpx 0 5rpx;
+    padding: 30rpx 0 30rpx;
     text-align: center;
+  }
+
+  .profile-wrapper text {
+    color: #999;
+    font-size: 32rpx;
   }
         
   .avatar {

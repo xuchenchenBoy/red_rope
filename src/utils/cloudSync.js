@@ -9,7 +9,7 @@ export default async function wxCloudSync(name, data, isLoading = false) {
   const token = getToken()
   if (token) {
     isLoading && wx.showLoading({
-      title: '请求中',
+      title: '操作中...',
     })
     const finalRes = await wx.cloud.callFunction({
       name,
@@ -20,7 +20,7 @@ export default async function wxCloudSync(name, data, isLoading = false) {
     })
     isLoading && wx.hideLoading()
     isLoading && wx.showToast({
-      title: '请求成功',
+      title: '操作成功',
       icon: 'success',
       duration: 1000
     });

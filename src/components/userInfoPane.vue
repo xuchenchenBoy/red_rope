@@ -1,7 +1,7 @@
 <template>
   <view>
     <view v-show="show" class="weui-panel pane" :class="{show: show}">
-      <view class="weui-panel__hd center">用户授权操作</view>
+      <view class="weui-panel__hd center">用户同意授权操作</view>
       <view class="weui-panel__bd">
         <view class="weui-media-box weui-media-box_text center">
           <button @getuserinfo="getUserInfo" open-type="getUserInfo" class="weui-btn" type="primary" size="mini">确定</button>
@@ -52,7 +52,7 @@
       bottom: -242rpx;
     }
     to {
-      bottom: 0;
+      bottom: -2rpx;
     }
   }
 
@@ -65,7 +65,7 @@
   }
 
   .show {
-    animation: slide 1s forwards;
+    animation: slide .6s forwards;
   }
 
   .mask {
@@ -76,5 +76,9 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, .55);
+  }
+
+  .weui-media-box {
+    padding: 70rpx;
   }
 </style>
