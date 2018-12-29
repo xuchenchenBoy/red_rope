@@ -20,7 +20,8 @@ exports.main = async (event, context) => {
         data: {
           openId: OPENID,
           appId: APPID,
-          token: encodeToken
+          token: encodeToken,
+          refreshTime: Date.now()
         }
       })
     }

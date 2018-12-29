@@ -13,6 +13,7 @@ exports.main = async (event, context) => {
     const data = res.data[0];
     const { _id } = data;
     delete event.userInfo;
+    event.refreshTime = Date.now();
     await db.collection('user').doc(_id).update({
       data: {
         ...event

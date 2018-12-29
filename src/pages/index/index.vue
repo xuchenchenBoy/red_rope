@@ -39,7 +39,8 @@ export default {
       latitude: '',
       showMap: true,
       init: false,
-      markers: []
+      markers: [],
+      timer: null,
     }
   },
   methods: {
@@ -60,9 +61,16 @@ export default {
       const mapConent = wx.createMapContext('map');
       mapConent.moveToLocation()
     },
-    async getOtherLocation() {
-      const res = await wxCloudSync('getOtherLocation')
-      this.markers = res.result.data;
+    getOtherLocation() {
+      this.timer = setInterval(async () => {
+        if (this.showMap) {
+          const res = await wxCloudSync('getOtherLocation')
+          this.markers = res.result.data;
+          const location = await wxSync({ api: 'getLocation' })
+          const { latitude, longitude } = location;
+          await wxCloudSync('saveUserInfo', { latitude, longitude })
+        }
+      }, 15 * 1000)
     }
   },
   onShareAppMessage() {
@@ -90,6 +98,10 @@ export default {
     await this.getOtherLocation();
     this.init = true;
   },
+  onUnload() {
+    clearInterval(this.timer);
+    this.timer = null;
+  }
 };
 </script>
 

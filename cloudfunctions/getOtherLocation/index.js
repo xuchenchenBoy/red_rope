@@ -3,13 +3,15 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 const db = cloud.database()
-
+const _ = db.command
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   const { OPENID, APPID } = wxContext;
   try {
-    const res = await db.collection('user').limit(1000).get();
+    const res = await db.collection('user').where({
+      refreshTime: _.gt(Date.now() - 5 * 60 * 1000)
+    }).limit(1000).get();
     const data = res.data.map(i => {
       let { _id, nickName, gender, clothsDesc, shoesDesc, trousersDesc, latitude, longitude, openId, } = i;
       nickName = nickName || '路人甲';
@@ -23,7 +25,8 @@ exports.main = async (event, context) => {
       clothsDesc =`衣服：${clothsDesc || '无描述'}`
       trousersDesc =`裤子：${trousersDesc || '无描述'}`
       shoesDesc =`鞋子：${shoesDesc || '无描述'}`
-      const content = [nickName + gender, clothsDesc, trousersDesc, shoesDesc].join('\n');
+      const title = nickName + gender + '\n';
+      const content = [title, clothsDesc, trousersDesc, shoesDesc].join('\n');
 
       return {
         openId,
@@ -35,11 +38,14 @@ exports.main = async (event, context) => {
         iconPath: '/static/imgs/other.png',
         callout: {
           content,
-          color: '#807c7c',
+          color: '#333',
           fontSize: 12,
           padding: 10,
           borderRadius: 3,
-          textAlign: 'center'
+          textAlign: 'center',
+          borderWidth: 1,
+          borderColor: '#CCC',
+          bgColor: '#fff'
         },
       }
     })
