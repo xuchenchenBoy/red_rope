@@ -70,7 +70,7 @@ export default {
           const { latitude, longitude } = location;
           await wxCloudSync('saveUserInfo', { latitude, longitude })
         }
-      }, 15 * 1000)
+      }, 7 * 1000)
     }
   },
   onShareAppMessage() {
