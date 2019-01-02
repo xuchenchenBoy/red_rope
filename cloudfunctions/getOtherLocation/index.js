@@ -42,7 +42,7 @@ exports.main = async (event, context) => {
           fontSize: 12,
           padding: 10,
           borderRadius: 3,
-          textAlign: 'center',
+          textAlign: 'left',
           borderWidth: 1,
           borderColor: '#CCC',
           bgColor: '#fff'

@@ -25,7 +25,7 @@
       },
       {
         "pagePath": "pages/person/main",
-        "text": "今日的我",
+        "text": "今日穿着",
         "iconPath": "static/imgs/person.png",
         "selectedIconPath": "static/imgs/person-active.png"
       }

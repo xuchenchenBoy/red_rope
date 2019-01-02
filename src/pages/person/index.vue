@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <view v-if="init">
-      <view class="profile-wrapper">
+    <view v-if="init" class="content">
+      <view class="card profile-wrapper">
         <image
           class="avatar"
           :src="avatarUrl || '/static/imgs/avatar.png'"
@@ -10,41 +10,26 @@
           <text>{{nickName || '路人甲'}}</text>
         </view>
       </view>
-      <view class="weui-cells__title">描述下自己的穿着打扮</view>
-        <view class="weui-cells weui-cells_after-title">
-          <view class="weui-cell weui-cell_input">
-            <view class="weui-cell__hd">
-              <view class="weui-label">衣服</view>
-            </view> 
-            <view class="weui-cell__bd">
-              <input v-model="clothsDesc" @change class="weui-input" placeholder="颜色、款式等描述"/>
-            </view>
-          </view>
-          <view class="weui-cell weui-cell_input">
-            <view class="weui-cell__hd">
-                <view class="weui-label">裤子</view>
-            </view>
-            <view class="weui-cell__bd">
-                <input v-model="trousersDesc" class="weui-input" placeholder="颜色、款式等描述"/>
-            </view>
-          </view>
-          <view class="weui-cell weui-cell_input">
-            <view class="weui-cell__hd">
-                <view class="weui-label">鞋子</view>
-            </view>
-            <view class="weui-cell__bd">
-                <input v-model="shoesDesc" class="weui-input" placeholder="颜色、款式等描述"/>
-            </view>
-          </view>
+      <view class="card description-wrapper">
+        <view class="clothing-desc">
+          <image class="clothing" src="/static/imgs/cloths.png" />
+          <input class="clothing-desc-input" placeholder-style="font-size: 28rpx;color: rgba(0,0,0,0.20)" placeholder-class="placeholder-input" v-model="clothsDesc" type="text" placeholder="颜色、款式等描述" />
         </view>
-      <view class="save-wrapper">
-        <button @click="updateInfo" class="weui-btn" type="primary">更新</button>
+        <view class="clothing-desc">
+          <image class="clothing" src="/static/imgs/trousers.png" />
+          <input class="clothing-desc-input" placeholder-class="placeholder-input" placeholder-style="font-size: 28rpx;color: rgba(0,0,0,0.20)" v-model="trousersDesc" type="text" placeholder="颜色、款式等描述" />
+        </view>
+        <view class="clothing-desc">
+          <image class="clothing" src="/static/imgs/shoes.png" />
+          <input class="clothing-desc-input" placeholder-class="placeholder-input" placeholder-style="font-size: 28rpx;color: rgba(0,0,0,0.20)" v-model="shoesDesc" type="text" placeholder="颜色、款式等描述" />
+        </view>
+        <button @click="updateInfo" plain="true" class="save-btn" hover-class="hover-btn" >更新</button>
       </view>
       <user-info-pane :show="showAuthorize" @hidePane="hideAuthorize" @getUserInfoSuc="authorizedSuc" />
     </view>
     <view v-else class="weui-loadmore loading-wrapper">
         <view class="weui-loading"></view>
-        <view class="weui-loadmore__tips loading-tip">正在加载</view>
+        <!-- <view class="weui-loadmore__tips loading-tip">正在加载</view> -->
     </view>
   </div>
 </template>
@@ -128,21 +113,62 @@ export default {
 </script>
 
 <style scoped>
+  .content {
+    padding: 36rpx 62rpx;
+  }
+
+  .card {
+    width: 100%;
+    box-sizing: border-box;
+    background: #FFF;
+    box-shadow: 0 4rpx 8rpx 2rpx rgba(231,231,231,0.50);
+    border-radius: 16rpx;
+  }
+
   .profile-wrapper {
-    padding: 30rpx 0 30rpx;
+    padding: 70rpx 0 38rpx;
     text-align: center;
+    margin-bottom: 36rpx;
   }
 
   .profile-wrapper text {
-    color: #999;
-    font-size: 32rpx;
+    font-size: 28rpx;
+    color: rgba(0,0,0,0.20);
   }
         
   .avatar {
-    width: 150rpx;
-    height: 150rpx;
+    width: 104rpx;
+    height: 104rpx;
+    margin-bottom: .54rpx;
     border-radius: 50%;
-    background-color: #eeeeee;
+    background-color: #eee;
+  }
+
+  .description-wrapper {
+    padding: 46rpx 50rpx 50rpx;
+  }
+
+  .clothing-desc {
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 81rpx;
+  }
+
+  .clothing {
+    width: 80rpx;
+    height: 80rpx;
+    margin-right: 23rpx;
+  }
+
+  .clothing-desc-input {
+    flex: 1;
+    font-size: 28rpx;
+    border-bottom: 2rpx solid #F4F4F4;
+  }
+  
+  .placeholder-input {
+    font-size: 28rpx;
+    color: rgba(0,0,0,0.20);
   }
 
   .save-wrapper {
@@ -155,5 +181,18 @@ export default {
 
   .loading-tip {
     color: #999999;
+  }
+
+  .save-btn {
+    border: 2rpx solid #F0F0F0;
+    border-radius: 14rpx;
+    font-family: PingFangSC-Medium;
+    font-size: 36rpx;
+    color: #EAEAEA;
+    background-color: #fff;
+  }
+
+  .hover-btn {
+    background-color: rgba(0, 0, 0, .05);
   }
 </style>

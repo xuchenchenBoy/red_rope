@@ -19,7 +19,7 @@
     </view>
     <view v-else class="weui-loadmore loading-wrapper">
         <view class="weui-loading"></view>
-        <view class="weui-loadmore__tips loading-tip">正在加载</view>
+       <!--  <view class="weui-loadmore__tips loading-tip">正在加载</view> -->
     </view>
   </view>
 </template>
@@ -35,8 +35,8 @@ export default {
   },
   data() {
     return {
-      longitude: '',
-      latitude: '',
+      longitude: 120.2,
+      latitude: 30.3,
       showMap: true,
       init: false,
       markers: [],
@@ -48,8 +48,10 @@ export default {
       if (isAgree) {
         wx.showLoading({ title: '加载地图中...' })
         await this.getSelfLocation()
-        this.showMap = true;
         wx.hideLoading()
+        this.showMap = true;
+        await this.getOtherLocation()
+        await this.updateOtherLocation();
       }
     },
     async getSelfLocation() { // 获取自身的定位坐标
@@ -59,18 +61,22 @@ export default {
       this.latitude = latitude;
       this.longitude = longitude;
       const mapConent = wx.createMapContext('map');
-      mapConent.moveToLocation()
+      mapConent.moveToLocation();
     },
     getOtherLocation() {
       this.timer = setInterval(async () => {
-        if (this.showMap) {
-          const res = await wxCloudSync('getOtherLocation')
-          this.markers = res.result.data;
-          const location = await wxSync({ api: 'getLocation' })
-          const { latitude, longitude } = location;
-          await wxCloudSync('saveUserInfo', { latitude, longitude })
-        }
+        await this.updateOtherLocation();
+        await this.updateSelfLocation();
       }, 7 * 1000)
+    },
+    async updateOtherLocation() {
+      const res = await wxCloudSync('getOtherLocation')
+      this.markers = res.result.data;
+    },
+    async updateSelfLocation() {
+      const location = await wxSync({ api: 'getLocation' })
+      const { latitude, longitude } = location;
+      await wxCloudSync('saveUserInfo', { latitude, longitude })
     }
   },
   onShareAppMessage() {
@@ -92,10 +98,15 @@ export default {
         await this.getSelfLocation()
       } catch (e) {
         this.showMap = false;
+        console.log('e=', e)
       }
     }
 
-    await this.getOtherLocation();
+    if (this.showMap) { // 更新他人的定位信息
+      await this.updateOtherLocation();
+      this.getOtherLocation();
+    }
+
     this.init = true;
   },
   onUnload() {
