@@ -27,32 +27,30 @@
       </view>
       <user-info-pane :show="showAuthorize" @hidePane="hideAuthorize" @getUserInfoSuc="authorizedSuc" />
     </view>
-    <view v-else class="weui-loadmore loading-wrapper">
-        <view class="weui-loading"></view>
-        <!-- <view class="weui-loadmore__tips loading-tip">正在加载</view> -->
-    </view>
+    <loading v-else />
   </div>
 </template>
 
 <script>
-// import wxSync from '@/utils/wxApiSync'
 import wxCloudSync from '@/utils/cloudSync'
 import userInfoPane from '@/components/userInfoPane'
+import loading from '@/components/loading'
 
 export default {
   data() {
     return {
-      showAuthorize: false,
+      showAuthorize: false, // 显示授权面板
       avatarUrl: '',
       nickName: '',
       trousersDesc: '',
       shoesDesc: '',
       clothsDesc: '',
-      init: false,
+      init: false, // 是否初始化过
     }
   },
   components: {
-    userInfoPane
+    userInfoPane,
+    loading
   },
   methods: {
     async updateInfo() {
@@ -70,9 +68,6 @@ export default {
           shoesDesc
         }
         await wxCloudSync('saveUserInfo', userInfo, true)
-        // wx.switchTab({
-        //   url: '/pages/index/main'
-        // })
       } else {
         this.showAuthorize = true;
       }

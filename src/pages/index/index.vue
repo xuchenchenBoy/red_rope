@@ -7,7 +7,7 @@
         class="map" 
         :longitude="longitude" 
         :latitude="latitude" 
-        scale="16" 
+        scale="13" 
         show-location
         :markers="markers"
       >
@@ -17,10 +17,7 @@
       </map>
       <authorizedSetting v-else @opensettingSuc="opensettingSuc" />
     </view>
-    <view v-else class="weui-loadmore loading-wrapper">
-        <view class="weui-loading"></view>
-       <!--  <view class="weui-loadmore__tips loading-tip">正在加载</view> -->
-    </view>
+    <loading v-else />
   </view>
 </template>
 
@@ -28,19 +25,21 @@
 import wxSync from '@/utils/wxApiSync'
 import wxCloudSync from '@/utils/cloudSync'
 import authorizedSetting from '@/components/authorizedSetting'
+import loading from '@/components/loading'
 
 export default {
   components: {
-    authorizedSetting
+    authorizedSetting,
+    loading
   },
   data() {
     return {
-      longitude: 120.2,
+      longitude: 120.2, // 初始时的杭州经纬度
       latitude: 30.3,
-      showMap: true,
-      init: false,
-      markers: [],
-      timer: null,
+      showMap: true, // 是否显示地图
+      init: false, // 是否初始化
+      markers: [], // 他人的定位点信息
+      timer: null, // 轮询请求定位点信息
     }
   },
   methods: {
@@ -67,7 +66,7 @@ export default {
       this.timer = setInterval(async () => {
         await this.updateOtherLocation();
         await this.updateSelfLocation();
-      }, 7 * 1000)
+      }, 8 * 1000)
     },
     async updateOtherLocation() {
       const res = await wxCloudSync('getOtherLocation')
@@ -98,7 +97,6 @@ export default {
         await this.getSelfLocation()
       } catch (e) {
         this.showMap = false;
-        console.log('e=', e)
       }
     }
 
@@ -144,10 +142,6 @@ export default {
     width: 54rpx;
     height: 54rpx;
     transform: translate(-50%, -50%);
-  }
-
-  .loading-wrapper {
-    padding-top: 150rpx;
   }
 
   .loading-tip {
