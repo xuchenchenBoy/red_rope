@@ -107,6 +107,10 @@ export default {
 
     this.init = true;
   },
+  mounted() {
+    const mapConent = wx.createMapContext('map');
+    mapConent.moveToLocation();
+  },
   onUnload() {
     clearInterval(this.timer);
     this.timer = null;
