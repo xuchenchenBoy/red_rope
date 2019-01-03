@@ -54,7 +54,7 @@ export default {
       }
     },
     async getSelfLocation() { // 获取自身的定位坐标
-      const location = await wxSync({ api: 'getLocation' })
+      const location = await wxSync({ api: 'getLocation', params: { type: 'gcj02' } })
       const { latitude, longitude } = location;
       await wxCloudSync('saveUserInfo', { latitude, longitude })
       this.latitude = latitude;
@@ -73,7 +73,7 @@ export default {
       this.markers = res.result.data;
     },
     async updateSelfLocation() {
-      const location = await wxSync({ api: 'getLocation' })
+      const location = await wxSync({ api: 'getLocation', params: { type: 'gcj02' } })
       const { latitude, longitude } = location;
       await wxCloudSync('saveUserInfo', { latitude, longitude })
     }
