@@ -44,7 +44,7 @@ exports.main = async (event, context) => {
           borderRadius: 3,
           textAlign: 'left',
           borderWidth: 1,
-          borderColor: '#CCC',
+          borderColor: '#f0f0f0',
           bgColor: '#fff'
         },
       }
